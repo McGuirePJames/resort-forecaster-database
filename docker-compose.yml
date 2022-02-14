@@ -6,25 +6,28 @@ services:
     build:
       context: .
       dockerfile: src/ResortForecaster.Migrations/Dockerfile
-      args:
-        - "HelloWorld"
     depends_on:
       - resort-forecaster-database
     networks:
       - resort-forecaster-database-network
+
   resort-forecaster-database:
     image: mcr.microsoft.com/mssql/server:latest
     container_name: resort-forecaster-database
     environment:
-      - MSSQL_SA_PASSWORD=Abcd1234!
+      - SA_PASSWORD=Abcd1234!
       - ACCEPT_EULA=Y
+      - MSSQL_TCP_PORT=1234
     ports:
-      - "1433:1433"
+      - "1234:1234"
     user: root
     networks:
       - resort-forecaster-database-network
     volumes:
       - resort-forecaster-database-volume:/var/opt/mssql/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
 networks:
   resort-forecaster-database-network:
     driver: bridge
