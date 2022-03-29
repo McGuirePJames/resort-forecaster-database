@@ -5,12 +5,11 @@ BEGIN
 END
 GO
 
-USE ResortForecaster
 IF
 NOT EXISTS (SELECT * FROM sys.objects 
-WHERE object_id = OBJECT_ID(N'[dbo].[SkiResorts]') AND type in (N'U'))
+WHERE object_id = OBJECT_ID(N'[ResortForecaster].[dbo].[SkiResorts]') AND type in (N'U'))
 BEGIN
-CREATE TABLE SkiResorts
+CREATE TABLE [ResortForecaster].[dbo].[SkiResorts]
 (
     Id          uniqueidentifier PRIMARY KEY,
     Name        nvarchar(100),
@@ -23,9 +22,9 @@ END
 
 IF
 NOT EXISTS (SELECT * FROM sys.objects 
-WHERE object_id = OBJECT_ID(N'[dbo].[FavoriteSkiResorts]') AND type in (N'U'))
+WHERE object_id = OBJECT_ID(N'[ResortForecaster].[dbo].[FavoriteSkiResorts]') AND type in (N'U'))
 BEGIN
-CREATE TABLE FavoriteSkiResorts
+CREATE TABLE [ResortForecaster].[dbo].[FavoriteSkiResorts]
 (
     Id          uniqueidentifier PRIMARY KEY,
     SkiResortId uniqueidentifier,
@@ -37,9 +36,9 @@ END
 
 IF
 NOT EXISTS (SELECT * FROM sys.objects 
-WHERE object_id = OBJECT_ID(N'[dbo].[Avalanches]') AND type in (N'U'))
+WHERE object_id = OBJECT_ID(N'[ResortForecaster].[dbo].[Avalanches]') AND type in (N'U'))
 BEGIN
-CREATE TABLE Avalanches
+CREATE TABLE [ResortForecaster].[dbo].[Avalanches]
 (
     Id         UNIQUEIDENTIFIER,
     ExternalId nvarchar(10),
@@ -64,9 +63,9 @@ GO
 
 IF
 NOT EXISTS (SELECT * FROM sys.objects 
-WHERE object_id = OBJECT_ID(N'[Lookup].[FeedbackType]') AND type in (N'U'))
+WHERE object_id = OBJECT_ID(N'[ResortForecaster].[Lookup].[FeedbackType]') AND type in (N'U'))
 BEGIN
-CREATE TABLE Lookup.FeedbackType
+CREATE TABLE [ResortForecaster].[Lookup].[FeedbackType]
 (
     Id          INT PRIMARY KEY,
     Description nvarchar(100),
@@ -75,9 +74,9 @@ END
 
 IF
 NOT EXISTS (SELECT * FROM sys.objects 
-WHERE object_id = OBJECT_ID(N'[dbo].[Feedback]') AND type in (N'U'))
+WHERE object_id = OBJECT_ID(N'[ResortForecaster].[dbo].[Feedback]') AND type in (N'U'))
 BEGIN
-CREATE TABLE dbo.Feedback
+CREATE TABLE [ResortForecaster].[dbo].[Feedback]
 (
     Id             UNIQUEIDENTIFIER PRIMARY KEY,
     Description    nvarchar(2000),

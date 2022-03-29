@@ -18,5 +18,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY "src/ResortForecaster.Migrations/" .
+VOLUME /var/opt/mssql/data/resort-forecaster-database-volume
 ENTRYPOINT ["dotnet", "ResortForecaster.Migrations.dll"]
-CMD ["Development"]
+CMD ["Docker"]

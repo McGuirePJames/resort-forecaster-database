@@ -24,26 +24,32 @@ public class Program
 {
     static void Main(string[] args)
     {
-        var appSettings = GetAppSettings();
+        var rootDirectory = args?.Length > 0 && args.Contains("Docker")
+            ? new DirectoryInfo("./")
+            : new DirectoryInfo("../../../");
+        
+        var appSettings = GetAppSettings(rootDirectory);
 
         if (args?.Length > 0)
         {
-            if (args.Contains("Development"))
+            if (args.Contains("Docker"))
             {
-                RunMigrations(appSettings.ConnectionStrings.Local);
+                RunMigrations(appSettings.ConnectionStrings.Local, rootDirectory);
             }
             else if (args.Contains("Production"))
             {
-                RunMigrations(appSettings.ConnectionStrings.Production);
+               RunMigrations(appSettings.ConnectionStrings.Production, rootDirectory);
             }
+        }
+        else
+        {
+            RunMigrations(appSettings.ConnectionStrings.Local, rootDirectory);
         }
     }
 
-    private static Appsettings GetAppSettings()
+    private static Appsettings GetAppSettings(DirectoryInfo rootDirectory)
     {
-        var di = new DirectoryInfo("./");
-
-        var files = di.GetFiles();
+        var files = rootDirectory.GetFiles();
 
         foreach (var file in files)
         {
@@ -62,13 +68,12 @@ public class Program
         return new Appsettings();
     }
     
-    private static void RunMigrations(string connectionString)
+    private static void RunMigrations(string connectionString, DirectoryInfo rootDirectory)
     {
         var sqlConnectionString = connectionString;
-            
-        var di = new DirectoryInfo("./Migrations");
-
-        var rgFiles = di.GetFiles("*.sql");
+        var migrationsDirectory = rootDirectory.GetDirectories("Migrations").FirstOrDefault();
+        
+        var rgFiles = migrationsDirectory.GetFiles("*.sql");
         var conn = new Microsoft.Data.SqlClient.SqlConnection(sqlConnectionString);
 
         Server server = new Server(new ServerConnection(conn));
@@ -79,5 +84,4 @@ public class Program
             server.ConnectionContext.ExecuteNonQuery(script);
         }
     }
-
 }
